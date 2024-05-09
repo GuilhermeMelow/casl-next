@@ -12,7 +12,7 @@ export function UserProvider({
   children: ReactNode;
   user: User;
 }) {
-  const [state] = react.useState<User>(user);
+  const [state] = react.useState(user);
 
   return <context.Provider value={state}>{children}</context.Provider>;
 }

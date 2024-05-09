@@ -5,11 +5,11 @@ export const defineAbilityForUser = (user: User) => {
     can("sinalize", "problems");
 
     if (user.isLoggedIn) {
+      can("readAll", "problems");
       can("delete", "problems", { user: user.id });
     }
 
     if (user.isLoggedIn && user.isAdm) {
-      can("readAll", "problems");
       can("delete", "problems");
     }
   });

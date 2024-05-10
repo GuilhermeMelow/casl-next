@@ -1,32 +1,45 @@
 import {
   AbilityBuilder,
-  MongoAbility,
+  InferSubjects,
   MongoQuery,
   createMongoAbility,
 } from "@casl/ability";
-import { Problem } from "./queries/problem";
 import { User } from "./types";
 
 export const defineAbilityForProblem = (user: User) => {
   const ability = createMongoAbility<[Actions, Subjects], Conditions>;
-  const { can, build } = new AbilityBuilder(ability);
+  const { can, cannot, build } = new AbilityBuilder(ability);
 
   can("sinalize", "Problem");
 
   if (user.isLoggedIn) {
     can("readAll", "Problem");
-    can("delete", "Problem", { user: user.id });
+    can("delete", "Problem", { id: user.id });
   }
 
   if (user.isLoggedIn && user.isAdm) {
     can("delete", "Problem");
+    cannot("sinalize", "Problem");
   }
 
-  return build();
+  return build({
+    detectSubjectType: (item) => item.kind,
+  });
 };
+
+export type ProblemAbility = ReturnType<typeof defineAbilityForProblem>;
+
+export function ProblemSubject(subject: { id?: number } | "Problem"):
+  | {
+      id?: number;
+      kind: "Problem";
+    }
+  | "Problem" {
+  if (typeof subject === "string") return subject;
+
+  return { id: subject.id, kind: "Problem" };
+}
 
 type Actions = "readAll" | "delete" | "sinalize";
 type Conditions = MongoQuery;
-type Subjects = Problem | "Problem";
-
-export type ProblemAbility = MongoAbility<[Actions, Subjects], Conditions>;
+type Subjects = InferSubjects<ReturnType<typeof ProblemSubject>>;

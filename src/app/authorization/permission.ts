@@ -9,11 +9,13 @@ type UserPermissions = (
 ) => void;
 
 export const permission: Record<Role, UserPermissions> = {
-  ADMIN(_, { can }) {
+  ADMIN(_, { can, cannot }) {
     can("manage", "all");
+    cannot("sinalize", "Problem");
   },
   COMMON(user, { can }) {
     can("readAll", "Problem");
+    can("delete", "Problem", { id: user.id });
     can("update", "Profile", { id: user.id });
   },
 };

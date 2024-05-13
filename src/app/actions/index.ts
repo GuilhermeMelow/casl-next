@@ -1,31 +1,38 @@
 "use server";
 
-import {
-  defineAbilityForProblem,
-  withAuthorization,
-} from "../authorization/ability";
+import { Abilities, defineAbilityFor } from "../authorization/ability";
 import { getUser } from "../login/queries/userQueries";
+import { User } from "../types";
 
-export const sinalizar = withAuthorization(
-  "sinalize",
-  "Problem",
-  getUser(),
-  async (message: string) => {
-    return message;
-  }
-);
+export async function sinalizar(message: string) {
+  const isAuthorize = await authorize({
+    user: await getUser(),
+    appAbility: ["sinalize", "Problem"],
+  });
+
+  if (!isAuthorize) return "Não autorizado";
+
+  return message;
+}
 
 export async function remove(title: string) {
   const user = await getUser();
-
-  const ability = defineAbilityForProblem(user);
-
-  const cannotDelete = ability.cannot("delete", {
-    id: user.id,
-    kind: "Problem",
+  const isAuthorize = await authorize({
+    user,
+    appAbility: ["delete", { kind: "Problem", id: user.id }],
   });
 
-  if (cannotDelete) return "Não autorizado";
+  if (!isAuthorize) return "Não autorizado";
 
-  return "removendo..." + title;
+  return "removendo... " + title;
 }
+
+async function authorize({ user, appAbility }: AuthorizeInput) {
+  const ability = defineAbilityFor(user);
+
+  const isAuthorize = ability.can(...appAbility);
+
+  return isAuthorize;
+}
+
+type AuthorizeInput = { appAbility: Abilities; user: User };

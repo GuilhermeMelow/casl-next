@@ -1,8 +1,8 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
+import { remove } from "../actions";
 import { useUserAbilityContext as useProblemUserAbilityContext } from "../context/userAbilityContext";
-import { ProblemSubject } from "../defineProblemAbility";
 import { Problem } from "../queries/problem";
 
 export function ProblemListDeleteButton({
@@ -10,12 +10,12 @@ export function ProblemListDeleteButton({
   ...attributes
 }: { problem: Problem } & React.HTMLAttributes<HTMLButtonElement>) {
   const ability = useProblemUserAbilityContext();
-  const canDelete = ability.can("delete", ProblemSubject({ id: user?.id }));
+  const canDelete = ability.can("delete", { id: user?.id, kind: "Problem" });
 
   if (!canDelete) return;
 
-  const deleteProblem = () => {
-    console.log("removendo...", title);
+  const deleteProblem = async () => {
+    console.log(await remove(title));
   };
 
   return (

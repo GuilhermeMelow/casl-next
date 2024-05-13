@@ -23,12 +23,12 @@ const db: DbUser[] = [
     id: 12,
     username: "adm",
     password: "adm1",
-    isAdm: true,
+    type: "ADMIN",
   },
   {
     id: 14,
     username: "user",
     password: "user1",
-    isAdm: false,
+    type: "COMMON",
   },
 ];

@@ -1,7 +1,9 @@
+import { Role } from "./authorization/roles";
+
 export type User = {
   id: number;
   username: string;
-  isAdm: boolean;
+  type: Role;
   isLoggedIn: boolean;
 };
 
@@ -9,5 +11,5 @@ export type DbUser = {
   id: number;
   username: string;
   password: string;
-  isAdm: boolean;
+  type: Role;
 };

@@ -1,11 +1,11 @@
 "use client";
 
 import react, { useContext } from "react";
-import { defineAbilityForProblem } from "../defineProblemAbility";
+import { defineAbilityFor } from "../authorization/ability";
 import { User } from "../types";
 
 const context = react.createContext<
-  ReturnType<typeof defineAbilityForProblem> | undefined
+  ReturnType<typeof defineAbilityFor> | undefined
 >(undefined);
 
 export function UserAbilityProvider({
@@ -15,7 +15,7 @@ export function UserAbilityProvider({
   children: react.ReactNode;
   user: User;
 }) {
-  const ability = defineAbilityForProblem(user);
+  const ability = defineAbilityFor(user);
 
   return <context.Provider value={ability}>{children}</context.Provider>;
 }

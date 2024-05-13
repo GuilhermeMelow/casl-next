@@ -1,33 +1,31 @@
 "use server";
 
 import {
-  ProblemSubject,
   defineAbilityForProblem,
-} from "../defineProblemAbility";
+  withAuthorization,
+} from "../authorization/ability";
 import { getUser } from "../login/queries/userQueries";
 
 export const sinalizar = withAuthorization(
   "sinalize",
   "Problem",
+  getUser(),
   async (message: string) => {
-    console.log(message);
     return message;
   }
 );
 
-function withAuthorization(
-  actions: "sinalize",
-  subject: { id?: number } | "Problem",
-  fn: Function
-) {
-  return async (...args: any[]) => {
-    const user = await getUser();
-    const ability = defineAbilityForProblem(user);
+export async function remove(title: string) {
+  const user = await getUser();
 
-    const cannotSinalize = ability.cannot(actions, ProblemSubject(subject));
+  const ability = defineAbilityForProblem(user);
 
-    if (cannotSinalize) return `Não autorizado`;
+  const cannotDelete = ability.cannot("delete", {
+    id: user.id,
+    kind: "Problem",
+  });
 
-    return fn(...args);
-  };
+  if (cannotDelete) return "Não autorizado";
+
+  return "removendo..." + title;
 }

@@ -1,11 +1,11 @@
-import { defineAbilityForProblem } from "../defineProblemAbility";
+import { defineAbilityFor } from "../authorization/ability";
 import { getUser } from "../login/queries/userQueries";
 import { Problem, listProblems } from "../queries/problem";
 import { ProblemListDeleteButton } from "./ProblemListDeleteButton";
 
 export async function ProblemsList() {
   const user = await getUser();
-  const ability = defineAbilityForProblem(user);
+  const ability = defineAbilityFor(user);
   const cannotRead = ability.cannot("readAll", "Problem");
 
   if (cannotRead) return;

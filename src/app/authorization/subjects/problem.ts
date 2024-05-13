@@ -2,6 +2,7 @@ import { InferSubjects } from "@casl/ability";
 
 interface Schema {
   id?: number;
+  featureFlags?: string[];
   kind: "Problem";
 }
 

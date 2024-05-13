@@ -14,8 +14,9 @@ export const permission: Record<Role, UserPermissions> = {
     cannot("sinalize", "Problem");
   },
   COMMON(user, { can }) {
-    can("readAll", "Problem");
     can("delete", "Problem", { id: user.id });
     can("update", "Profile", { id: user.id });
+    can("readAll", "Problem", { featureFlags: { $in: ["teste1", "teste"] } });
+    can("sinalize", "Problem");
   },
 };

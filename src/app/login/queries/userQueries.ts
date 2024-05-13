@@ -24,11 +24,20 @@ const db: DbUser[] = [
     username: "adm",
     password: "adm1",
     type: "ADMIN",
+    featureFlags: ["teste"],
   },
   {
     id: 14,
     username: "user",
     password: "user1",
     type: "COMMON",
+    featureFlags: ["teste1"],
+  },
+  {
+    id: 14,
+    username: "userVazio",
+    password: "user1",
+    type: "COMMON",
+    featureFlags: ["vazio", "sem nada"],
   },
 ];

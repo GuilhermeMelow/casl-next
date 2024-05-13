@@ -5,6 +5,7 @@ export type User = {
   username: string;
   type: Role;
   isLoggedIn: boolean;
+  featureFlags: string[];
 };
 
 export type DbUser = {
@@ -12,4 +13,5 @@ export type DbUser = {
   username: string;
   password: string;
   type: Role;
+  featureFlags: string[];
 };

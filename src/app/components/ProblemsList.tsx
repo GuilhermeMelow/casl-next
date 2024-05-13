@@ -6,7 +6,10 @@ import { ProblemListDeleteButton } from "./ProblemListDeleteButton";
 export async function ProblemsList() {
   const user = await getUser();
   const ability = defineAbilityFor(user);
-  const cannotRead = ability.cannot("readAll", "Problem");
+  const cannotRead = ability.cannot("readAll", {
+    featureFlags: user.featureFlags,
+    kind: "Problem",
+  });
 
   if (cannotRead) return;
 
